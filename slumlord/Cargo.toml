@@ -18,3 +18,10 @@ sanctum-system-program-lib = { workspace = true }
 slumlord-lib = { workspace = true }
 slumlord_interface = { workspace = true }
 solana-program = { workspace = true }
+
+[dev-dependencies]
+async-trait = { workspace = true }
+sanctum-solana-test-utils = { workspace = true }
+solana-program-test = { workspace = true }
+solana-sdk = { workspace = true }
+tokio = { workspace = true }

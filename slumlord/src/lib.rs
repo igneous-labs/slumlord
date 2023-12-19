@@ -29,7 +29,7 @@ use solana_program::{
 #[cfg(not(feature = "no-entrypoint"))]
 solana_program::entrypoint!(process_instruction);
 
-fn process_instruction(
+pub fn process_instruction(
     program_id: &Pubkey,
     accounts: &[AccountInfo],
     instruction_data: &[u8],
@@ -56,6 +56,8 @@ fn process_instruction(
 /// Assign slumlord PDA to slumlord program.
 ///
 /// Permissionless, called once.
+///
+/// Can call multiple times: system_program::assign() will be a no-op
 ///
 /// Pre-requisites:
 /// - slumlord PDA should be funded with enough for rent-exempt 0

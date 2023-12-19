@@ -7,6 +7,7 @@ members = [
 ]
 
 [workspace.dependencies]
+async-trait = ">=0.1"
 borsh = ">=0.9"
 bytemuck = "^1"
 num-derive = ">=0.3"
@@ -14,9 +15,13 @@ num-traits = ">=0.2"
 sanctum-macros = "^1"
 sanctum-misc-utils = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "2d1718f" }
 sanctum-system-program-lib = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "2d1718f" }
+sanctum-solana-test-utils = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "2d1718f" }
 serde = "^1"
-solana-program = "=1.16.20"
+solana-program = "^1"
+solana-program-test = "^1"
+solana-sdk = "^1"
 thiserror = "^1"
+tokio = "^1"
 
 # workspace members
 slumlord = { path = "./slumlord" }
