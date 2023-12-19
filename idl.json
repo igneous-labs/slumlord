@@ -1,0 +1,131 @@
+{
+  "version": "1.0.0",
+  "name": "slumlord",
+  "instructions": [
+    {
+      "name": "Init",
+      "discriminant": {
+        "type": "u8",
+        "value": 0
+      },
+      "accounts": [
+        {
+          "name": "slumlord",
+          "isMut": true,
+          "isSigner": false,
+          "desc": "The slumlord PDA [\"slumlord\"]"
+        },
+        {
+          "name": "system_program",
+          "isMut": false,
+          "isSigner": false,
+          "desc": "System Program"
+        }
+      ]
+    },
+    {
+      "name": "Borrow",
+      "discriminant": {
+        "type": "u8",
+        "value": 1
+      },
+      "accounts": [
+        {
+          "name": "slumlord",
+          "isMut": true,
+          "isSigner": false,
+          "desc": "The slumlord PDA [\"slumlord\"]"
+        },
+        {
+          "name": "dst",
+          "isMut": true,
+          "isSigner": false,
+          "desc": "The destination account to lend SOL to"
+        },
+        {
+          "name": "instructions",
+          "isMut": false,
+          "isSigner": false,
+          "desc": "Instructions sysvar"
+        }
+      ]
+    },
+    {
+      "name": "Repay",
+      "discriminant": {
+        "type": "u8",
+        "value": 2
+      },
+      "accounts": [
+        {
+          "name": "slumlord",
+          "isMut": true,
+          "isSigner": false,
+          "desc": "The slumlord PDA [\"slumlord\"]"
+        },
+        {
+          "name": "src",
+          "isMut": true,
+          "isSigner": true,
+          "desc": "The system account paying the outstanding flash loan"
+        },
+        {
+          "name": "system_program",
+          "isMut": false,
+          "isSigner": false,
+          "desc": "System Program"
+        }
+      ]
+    },
+    {
+      "name": "CheckRepaid",
+      "discriminant": {
+        "type": "u8",
+        "value": 3
+      },
+      "accounts": [
+        {
+          "name": "slumlord",
+          "isMut": true,
+          "isSigner": false,
+          "desc": "The slumlord PDA [\"slumlord\"]"
+        }
+      ]
+    }
+  ],
+  "types": [
+    {
+      "name": "Slumlord",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "old_lamports",
+            "type": "u64"
+          }
+        ]
+      }
+    }
+  ],
+  "errors": [
+    {
+      "code": 0,
+      "name": "NoSucceedingCheckRepaid",
+      "msg": "No succeeding CheckRepaid instruction found"
+    },
+    {
+      "code": 1,
+      "name": "BorrowAlreadyActive",
+      "msg": "Can only Borrow once before CheckRepaid"
+    },
+    {
+      "code": 2,
+      "name": "InsufficientRepay",
+      "msg": "Outstanding loan was not fully repaid"
+    }
+  ],
+  "metadata": {
+    "origin": "shank",
+    "address": "s1umBj7CEUA6djs6V1c6o2Nym3QrqF4ryKDr1Nm1FKt"
+  }
+}
