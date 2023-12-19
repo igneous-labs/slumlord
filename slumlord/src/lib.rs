@@ -60,7 +60,8 @@ pub fn process_instruction(
 /// Can call multiple times: system_program::assign() will be a no-op
 ///
 /// Pre-requisites:
-/// - slumlord PDA should be funded with enough for rent-exempt 0
+/// - slumlord PDA should be funded with enough for rent-exempt 0.
+///   These funds are locked in there and serve as the flash loan amount
 fn process_init(accounts: &[AccountInfo]) -> ProgramResult {
     let accounts: InitAccounts = load_accounts(accounts)?;
 
@@ -147,7 +148,7 @@ fn is_check_repaid_ix(ix: &Instruction) -> bool {
 /// to the slumlord account.
 ///
 /// This is a util ix for borrowers to easily repay the loan amount without
-/// having to calculate it offchain prior.
+/// having to calculate it prior.
 fn process_repay(accounts: &[AccountInfo]) -> ProgramResult {
     let accounts: RepayAccounts = load_accounts(accounts)?;
 

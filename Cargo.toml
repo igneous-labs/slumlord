@@ -6,6 +6,9 @@ members = [
     "slumlord_interface"
 ]
 
+[workspace.package]
+license = "MIT OR Apache-2.0"
+
 [workspace.dependencies]
 async-trait = ">=0.1"
 borsh = ">=0.9"

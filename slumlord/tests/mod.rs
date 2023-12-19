@@ -115,6 +115,7 @@ async fn init_fail_insufficient_funds() {
         Some(&payer.pubkey()),
     );
     tx.sign(&[&payer], last_blockhash);
+    // TODO: assert == `TransactionError(InsufficientFundsForRent { account_index: 1 })`
     banks_client.process_transaction(tx).await.unwrap_err();
     banks_client.assert_account_not_exist(SLUMLORD_ID).await;
 }
@@ -276,6 +277,28 @@ async fn insufficient_repay_fail() {
     let err = banks_client.process_transaction(tx).await.unwrap_err();
 
     assert_custom_err(err, SlumlordError::InsufficientRepay);
+    banks_client
+        .assert_slumlord_balance(SLUMLORD_LAMPORTS)
+        .await;
+    banks_client.assert_slumlord_data_empty().await;
+}
+
+#[tokio::test]
+async fn loan_to_self_fail() {
+    let pt = ProgramTest::default()
+        .add_slumlord_program()
+        .add_slumlord(SLUMLORD_LAMPORTS);
+
+    let (mut banks_client, payer, last_blockhash) = pt.start().await;
+
+    let borrow_ix = borrow_ix(BorrowFreeArgs { dst: SLUMLORD_ID }).unwrap();
+    let check_repaid_ix = check_repaid_ix_full().unwrap();
+    let mut tx = Transaction::new_with_payer(&[borrow_ix, check_repaid_ix], Some(&payer.pubkey()));
+    tx.sign(&[&payer], last_blockhash);
+
+    // TODO: assert == TransactionError(InstructionError(0, UnbalancedInstruction))
+    banks_client.process_transaction(tx).await.unwrap_err();
+
     banks_client
         .assert_slumlord_balance(SLUMLORD_LAMPORTS)
         .await;
