@@ -115,6 +115,7 @@ async fn init_fail_insufficient_funds() {
         Some(&payer.pubkey()),
     );
     tx.sign(&[&payer], last_blockhash);
+    // The program logs will end with "success", but the tx actly failed
     // TODO: assert == `TransactionError(InsufficientFundsForRent { account_index: 1 })`
     banks_client.process_transaction(tx).await.unwrap_err();
     banks_client.assert_account_not_exist(SLUMLORD_ID).await;
@@ -126,7 +127,7 @@ async fn init_fail_no_funds() {
     let (mut banks_client, payer, last_blockhash) = pt.start().await;
     let mut tx = Transaction::new_with_payer(&[init_ix_full().unwrap()], Some(&payer.pubkey()));
     tx.sign(&[&payer], last_blockhash);
-    // if slumlord has no lamports at all then Init succeeds,
+    // if slumlord has no lamports at all then the tx succeeds,
     // but the account is not created
     banks_client.process_transaction(tx).await.unwrap();
     banks_client.assert_account_not_exist(SLUMLORD_ID).await;
@@ -296,6 +297,7 @@ async fn loan_to_self_fail() {
     let mut tx = Transaction::new_with_payer(&[borrow_ix, check_repaid_ix], Some(&payer.pubkey()));
     tx.sign(&[&payer], last_blockhash);
 
+    // The program logs will end with "success", but the tx actly failed
     // TODO: assert == TransactionError(InstructionError(0, UnbalancedInstruction))
     banks_client.process_transaction(tx).await.unwrap_err();
 

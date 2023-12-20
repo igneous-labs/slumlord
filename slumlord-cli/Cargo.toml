@@ -1,0 +1,16 @@
+[package]
+name = "slumlord-cli"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "slumlord"
+path = "src/main.rs"
+
+[dependencies]
+clap = { workspace = true } 
+sanctum-solana-cli-utils = { workspace = true }
+sanctum-system-program-lib = { workspace = true }
+slumlord-lib = { workspace = true }
+solana-client = { workspace = true }
+solana-sdk = { workspace = true }

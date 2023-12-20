@@ -14,8 +14,8 @@ use slumlord_interface::{
 };
 use slumlord_lib::{
     program::{SLUMLORD_BUMP, SLUMLORD_SEED},
-    try_slumlord, try_slumlord_mut, BorrowFreeArgs, RepayFreeArgs, CHECK_REPAID_KEYS, INIT_KEYS,
-    SLUMLORD_ACCOUNT_LEN,
+    try_slumlord_mut, BorrowFreeArgs, LoanActiveSlumlordAccount, RepayFreeArgs, CHECK_REPAID_KEYS,
+    INIT_KEYS, SLUMLORD_ACCOUNT_LEN,
 };
 use solana_program::{
     account_info::AccountInfo,
@@ -159,20 +159,12 @@ fn process_repay(accounts: &[AccountInfo]) -> ProgramResult {
         .map_err(log_and_return_wrong_acc_err)?;
     repay_verify_account_privileges(accounts).map_err(log_and_return_acc_privilege_err)?;
 
-    let outstanding_lamports = {
-        let slumlord_data = accounts.slumlord.try_borrow_data()?;
-        let slumlord = try_slumlord(&slumlord_data)?;
-        slumlord
-            .old_lamports
-            .saturating_sub(accounts.slumlord.lamports())
-    };
-
     transfer_invoke(
         TransferAccounts {
             from: accounts.src,
             to: accounts.slumlord,
         },
-        outstanding_lamports,
+        accounts.slumlord.curr_loan_lamports_outstanding()?,
     )?;
 
     Ok(())
@@ -188,11 +180,7 @@ fn process_check_repaid(accounts: &[AccountInfo]) -> ProgramResult {
     check_repaid_verify_account_privileges(accounts).map_err(log_and_return_acc_privilege_err)?;
 
     let slumlord_lamports = accounts.slumlord.lamports();
-    let min_expected_slumlord_lamports = {
-        let slumlord_data = accounts.slumlord.try_borrow_data()?;
-        let slumlord = try_slumlord(&slumlord_data)?;
-        slumlord.old_lamports
-    };
+    let min_expected_slumlord_lamports = accounts.slumlord.old_lamports()?;
 
     if slumlord_lamports < min_expected_slumlord_lamports {
         return Err(SlumlordError::InsufficientRepay.into());

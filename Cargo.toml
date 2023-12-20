@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "slumlord",
+    "slumlord-cli",
     "slumlord-lib",
     "slumlord_interface"
 ]
@@ -13,20 +14,28 @@ license = "MIT OR Apache-2.0"
 async-trait = ">=0.1"
 borsh = ">=0.9"
 bytemuck = "^1"
+clap = { version = "^3.0", features = ["derive"] } # can't use 4.0 because min supported rust vers is 1.70
 num-derive = ">=0.3"
 num-traits = ">=0.2"
 sanctum-macros = "^1"
-sanctum-misc-utils = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "2d1718f" }
-sanctum-system-program-lib = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "2d1718f" }
-sanctum-solana-test-utils = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "2d1718f" }
+sanctum-misc-utils = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "1e179ae" }
+sanctum-solana-cli-utils = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "1e179ae" }
+sanctum-solana-test-utils = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "1e179ae" }
+sanctum-system-program-lib = { git = "https://github.com/igneous-labs/sanctum-solana-utils.git", rev = "1e179ae" }
 serde = "^1"
-solana-program = "^1"
-solana-program-test = "^1"
-solana-sdk = "^1"
+solana-readonly-account = "^1"
 thiserror = "^1"
 tokio = "^1"
 
+# solana deps
+# Use ^1 for library user flexibility but lock to 1.16.20 for prod
+solana-client = "^1"
+solana-program = "^1"
+solana-program-test = "^1"
+solana-sdk = "^1"
+
 # workspace members
 slumlord = { path = "./slumlord" }
+slumlord-cli = { path = "./slumlord-cli" }
 slumlord-lib = { path = "./slumlord-lib" }
 slumlord_interface = { path = "./slumlord_interface" }

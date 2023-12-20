@@ -5,6 +5,7 @@ use slumlord_interface::{
 use solana_program::{
     instruction::Instruction, program_error::ProgramError, pubkey::Pubkey, system_program, sysvar,
 };
+use solana_readonly_account::{ReadonlyAccountData, ReadonlyAccountLamports};
 
 pub mod program {
     sanctum_macros::declare_program_keys!(
@@ -80,4 +81,32 @@ pub fn try_slumlord(slumlord_acc_data: &[u8]) -> Result<&Slumlord, ProgramError>
 
 pub fn try_slumlord_mut(slumlord_acc_data: &mut [u8]) -> Result<&mut Slumlord, ProgramError> {
     try_from_bytes_mut(slumlord_acc_data).map_err(|_e| ProgramError::InvalidAccountData)
+}
+
+/// Other programs can make use of this trait for onchain calculations
+pub trait LoanActiveSlumlordAccount {
+    /// Returns the amount of lamports the user needs to transfer to
+    /// slumlord to fully repay the current flash loan.
+    ///
+    /// Does not check identity of slumlord account
+    fn curr_loan_lamports_outstanding(&self) -> Result<u64, ProgramError>;
+
+    /// Returns the original lamports owned by this slumlord account
+    /// before the flash loan was disbursed, recorded in the account data
+    ///
+    /// Does not check identity of slumlord account
+    fn old_lamports(&self) -> Result<u64, ProgramError>;
+}
+
+impl<D: ReadonlyAccountData + ReadonlyAccountLamports> LoanActiveSlumlordAccount for D {
+    fn curr_loan_lamports_outstanding(&self) -> Result<u64, ProgramError> {
+        let old_lamports = self.old_lamports()?;
+        Ok(old_lamports.saturating_sub(self.lamports()))
+    }
+
+    fn old_lamports(&self) -> Result<u64, ProgramError> {
+        let data = &self.data();
+        let slumlord = try_slumlord(data)?;
+        Ok(slumlord.old_lamports)
+    }
 }
