@@ -17,8 +17,7 @@ pub struct InitArgs {
     #[clap(
         long,
         short,
-        help = "if true, run transaction even if slumlord already initialized, effectively sending SOL to it. If false, do nothing if slumlord already initialized.",
-        default_value_t = false
+        help = "if true, run transaction even if slumlord already initialized, effectively sending SOL to it. If false, do nothing if slumlord already initialized."
     )]
     pub force: bool,
 }

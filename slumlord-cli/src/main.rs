@@ -20,8 +20,7 @@ pub struct Args {
     #[clap(
         long,
         short,
-        help = "only simulate any transactions instead of sending them",
-        default_value_t = false
+        help = "only simulate any transactions instead of sending them"
     )]
     pub dry_run: bool,
 
