@@ -52,16 +52,30 @@ Crate generated with solores 0.5.0
 
 Using [ellipsislabs/solana:1.16.20](https://github.com/Ellipsis-Labs/solana-verifiable-build/blob/master/docker/v1.16.20.Dockerfile)
 
+### Build
+
+In workspace root:
+
+```sh
+solana-verify build
+```
+
+### Verify
+
+In workspace root after build:
+
 ```sh
 solana-verify get-executable-hash target/deploy/slumlord.so
 ```
+
+Against mainnet deploy:
 
 ```sh
 solana-verify get-program-hash s1umBj7CEUA6djs6V1c6o2Nym3QrqF4ryKDr1Nm1FKt
 ```
 
-Hash:
+### Hash
 
 ```sh
-c81aa8bdbc8d380c53f7ca2942581f6c15e250c5f1b195822256e60e765c19d9
+17d20483ee24bb0c1d0fead460f8eee7ccfc9bfcd9c811d295d3a56cc8e96065
 ```
