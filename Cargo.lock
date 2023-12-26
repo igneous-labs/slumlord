@@ -3411,6 +3411,7 @@ name = "slumlord"
 version = "1.0.0"
 dependencies = [
  "async-trait",
+ "sanctum-macros",
  "sanctum-misc-utils",
  "sanctum-solana-test-utils",
  "sanctum-system-program-lib",

@@ -1,4 +1,5 @@
 mod common;
+mod cpi;
 
 use common::*;
 

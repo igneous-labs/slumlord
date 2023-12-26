@@ -179,6 +179,11 @@ fn process_check_repaid(accounts: &[AccountInfo]) -> ProgramResult {
         .map_err(log_and_return_wrong_acc_err)?;
     check_repaid_verify_account_privileges(accounts).map_err(log_and_return_acc_privilege_err)?;
 
+    // no flash loan active, successful no-op
+    if accounts.slumlord.data_is_empty() {
+        return Ok(());
+    }
+
     let slumlord_lamports = accounts.slumlord.lamports();
     let min_expected_slumlord_lamports = accounts.slumlord.old_lamports()?;
 
