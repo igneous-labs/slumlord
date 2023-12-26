@@ -8,6 +8,11 @@ Simple zero-fee SOL flash loan program for paying accounts rent.
   - Can be called from CPI
 - `CheckRepaid` instruction must be a top-level instruction of the transaction and follow the `Borrow` instruction
   - User must make sure to return at least the same amount of `slumlord_balance - 1` to `slumlord` account before calling `CheckRepaid`
+  - Idempotent, can be called from CPI. If no flash loan is active, this will just be a successful no-op
+- `Repay` instruction transfers the outstanding loan balance from the specified SystemAccount to `slumlord`
+  - Allows users to easily repay the flash loan without having to read the loan amount from the `slumlord` account.
+
+If you're composing with slumlord via CPI in your own program, consider making use of `CheckRepaid`'s idempotency and calling it in your program to end the loan where appropriate. This allows your program to be composed with subsequent `Borrow`s while still only requiring a single top-level `CheckRepaid` instruction at the end.
 
 ## Setup
 
